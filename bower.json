@@ -1,0 +1,24 @@
+{
+  "name": "angular-pre-data",
+  "homepage": "https://github.com/robstoll/angular-pre-data",
+  "authors": [
+    "Robert Stoll <rstoll@tutteli.ch>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/robstoll/angular-pre-data"
+  },
+  "description": "Directive for AngularJS which allows to initialise models according to the value attribute of input fields",
+  "moduleType": "globals",
+  "keywords": [
+    "angular",
+    "preload",
+    "initial load time"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ]
+}
