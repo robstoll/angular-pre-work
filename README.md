@@ -50,7 +50,7 @@ angular.module('app', ['ui.router', 'tutteli.preData'])
 ```
 
 
-A "full" (still very small) working example can be found in the repo. Download the repo, open up the example folder and open index.html. 
+A "full" (still very small) working example can be found in the repo. Download the repo, open up the example folder and open index.html. Alternatively, you can try it out here: http://plnkr.co/edit/98AdSYCnwzIkqocDwlHq
 
 The code is quite small, so it is probably good enough to just copy the content of [src/pre-data.js](https://github.com/robstoll/angular-pre-data/blob/master/src/pre-data.js) manually. Alternatively, you can install it with bower `angular-pre-data`
 
