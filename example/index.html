@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<!--  
+ * This file is part of the project angular-pre-data published under the Apache License 2.0
+ * For the full copyright and license information, please have a look at LICENSE in the
+ * root folder or visit https://github.com/robstoll/angular-pre-data
+-->
+<style type="text/css">
+  body {
+      margin:10px;
+      font-family: Helvetica, Arial;
+      font-size: 14px;
+      line-height:1.5em;
+  }
+  form {
+    border:1px #CCC dashed;
+    padding: 10px;
+  }
+</style>
+
+<body ng-app="app">
+<ul>
+<li><a ui-sref="home">Home</a></li>
+<li><a ui-sref="login">Login</a></li>
+</ul>
+<p>
+Imagine the form below was sent by the server in the first request and the user already wrote the username before angular was fully loaded.
+<br/>
+The input of the user is simulated by the following JavaScript snippet: document.getElementById('username').value = 'admin';
+</p>
+
+<div ui-view></div>
+<div pre-data="login.tpl">
+    <!-- start login.tpl - send with the first request by the server -- please use your imagination ;) -->
+    <form>
+      <legend for="username">Username</legend> <input type="text" name="username" id="username" ng-model="credentials.username"/><br/>
+      <legend for="password">Password</legend> <input type="password" name="password" ng-model="credentials.password"/>
+      <input type="submit" value="Login"/>
+    </form> 
+    <p id="info" style="display:none">
+        {{info}}
+    </p>
+    <!-- end login.tpl -->
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"></script>
+<script src="../src/pre-data.js"></script>
+
+<script type="text/javascript">
+//simulate user entering some data into the username textbox
+document.getElementById('username').value = 'admin';
+
+angular.module('app', ['ui.router', 'tutteli.preData'])
+  .config(['$stateProvider', function($stateProvider) {
+    $stateProvider.state('login', {
+        url: '',
+        controller: 'LoginCtrl',
+        templateUrl: 'login.tpl'
+    }).state('home', {
+        url: '/',
+        templateUrl: 'home.tpl'
+    });
+}]).controller('LoginCtrl', ['$scope','tutteli.preData', function($scope, preData) {
+    $scope.credentials = {
+            username: '',
+            password:''
+    };
+    //merge pre-collected data with pre-data="login.tpl" to the scope
+    if (preData.merge('login.tpl', $scope)) {
+        $scope.info = 'following the pre-loaded data from the user -- '
+        + 'username: ' + $scope.credentials.username + ' / password: ' + $scope.credentials.password;
+    } else {
+        $scope.info = 'no preloaded-input detected.';
+    }
+    angular.element(document.querySelector('#info')).css('display', 'block');
+}]);
+</script>
+<body>
+</html>
