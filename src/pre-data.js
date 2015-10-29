@@ -26,17 +26,15 @@
         };
     }])
     .service('tutteli.preData', function(){
-        return {
-            merge: function(name, scope) {
-                if (preloadedData[name]) {
-                    for(var prop in preloadedData[name]) {
-                        scope[prop] = preloadedData[name][prop];
-                    }
-                    delete preloadedData[name];
-                    return true;
+        this.merge = function(name, scope) {
+            if (preloadedData[name]) {
+                for(var prop in preloadedData[name]) {
+                    scope[prop] = preloadedData[name][prop];
                 }
-                return false;
-            } 
+                delete preloadedData[name];
+                return true;
+            }
+            return false;
         };
     });
     
