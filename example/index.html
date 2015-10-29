@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <!--  
- * This file is part of the project angular-pre-data published under the Apache License 2.0
+ * This file is part of the project angular-pre-work published under the Apache License 2.0
  * For the full copyright and license information, please have a look at LICENSE in the
  * root folder or visit https://github.com/robstoll/angular-pre-data
 -->
@@ -15,6 +15,9 @@
   form {
     border:1px #CCC dashed;
     padding: 10px;
+  }
+  label {
+    display:block
   }
 </style>
 
@@ -30,11 +33,11 @@ The input of the user is simulated by the following JavaScript snippet: document
 </p>
 
 <div ui-view></div>
-<div pre-data="login.tpl">
+<div pre-work="login.tpl">
     <!-- start login.tpl - send with the first request by the server - please use your imagination ;) -->
     <form>
-      <legend for="username">Username</legend> <input type="text" name="username" id="username" ng-model="credentials.username"/><br/>
-      <legend for="password">Password</legend> <input type="password" name="password" ng-model="credentials.password"/>
+      <label for="username">Username</label> <input type="text" name="username" id="username" ng-model="credentials.username"/><br/>
+      <label for="password">Password</label> <input type="password" name="password" ng-model="credentials.password"/>
       <input type="submit" value="Login"/>
     </form> 
     <p id="info" style="display:none">
@@ -44,13 +47,13 @@ The input of the user is simulated by the following JavaScript snippet: document
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"></script>
-<script src="../src/pre-data.js"></script>
+<script src="../src/pre-work.js"></script>
 
 <script type="text/javascript">
 //simulate user entering some data into the username textbox
 document.getElementById('username').value = 'admin';
 
-angular.module('app', ['ui.router', 'tutteli.preData'])
+angular.module('app', ['ui.router', 'tutteli.preWork'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('login', {
         url: '',
@@ -60,13 +63,13 @@ angular.module('app', ['ui.router', 'tutteli.preData'])
         url: '/',
         templateUrl: 'home.tpl'
     });
-}]).controller('LoginCtrl', ['$scope','tutteli.preData', function($scope, preData) {
+}]).controller('LoginCtrl', ['$scope','tutteli.PreWork', function($scope, PreWork) {
     $scope.credentials = {
             username: '',
             password:''
     };
     //merge pre-collected data with pre-data="login.tpl" to the scope
-    if (preData.merge('login.tpl', $scope)) {
+    if (PreWork.merge('login.tpl', $scope)) {
         $scope.info = 'following the pre-loaded data from the user -- '
         + 'username: ' + $scope.credentials.username + ' / password: ' + $scope.credentials.password;
     } else {
