@@ -19,6 +19,10 @@
             }
             return false;
         };
+        
+        this.get = function(name) {
+            return preparedData[name];
+        };
     }
     
     angular.module('tutteli.preWork', [])
