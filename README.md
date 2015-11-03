@@ -1,5 +1,7 @@
 # tutteli.preWork for AngularJS
 
+[![Build Status](https://travis-ci.org/robstoll/angular-pre-work.svg?branch=master)](https://travis-ci.org/robstoll/angular-pre-work)
+
 One optimisation to reduce the initial load time of an AngularJS app is based on the idea, that loading the template which shall be displayed with a second request is slower than serving it directly in the first request. This can already be achieved using a `<script type="text/ng-template">` tag. However, one still needs to wait until angular and all modules are fully loaded and initialised. Depending on the use case this might not be desired. Instead, a user shall be able to do some pre-work before angular is loaded.
 
 The module tutteli.preWork tries to simplify the process of pre-working (before angular was loaded). Imagine we need to login before we can use the app and thus the server redirects the user to the login page at first. Here we want that the user can start writing straight away without waiting for angular. There is just one problem, all entered data will be lost once AngularJS sets up the two way binding.
