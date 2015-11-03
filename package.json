@@ -20,13 +20,10 @@
     "karma": "^0.13.11",
     "karma-chrome-launcher": "^0.2.1",
     "karma-firefox-launcher": "^0.1.6",
-    "karma-jasmine": "^0.3.6",
-    "uglify-js": "^2.5.0"
+    "karma-jasmine": "^0.3.6"
   },
   "scripts": {
-    "postinstall": "bower install && npm run dist",
-    "test": "node node_modules/karma/bin/karma start devconfig/karma.conf.js",
-    "protractor": "protractor devconfig/protractor-conf.js",
-    "dist": "rm -rf dist && mkdir dist && node node_modules/uglify-js/bin/uglifyjs -m -c -o ./dist/pre-work.js ./src/pre-work.js"
+    "postinstall": "bower install",
+    "test": "node node_modules/karma/bin/karma start devconfig/karma.conf.js"
   }
 }
