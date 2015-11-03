@@ -22,7 +22,8 @@
     "bower_components",
     "package.json",
     "test",
-    "devconfig"    
+    "devconfig",
+    "example"    
   ],
   "main": [],
   "dependencies": {
