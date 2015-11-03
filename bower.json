@@ -1,5 +1,5 @@
 {
-  "name": "angular-pre-work",
+  "name": "tutteli-angular-pre-work",
   "homepage": "https://github.com/robstoll/angular-pre-work",
   "authors": [
     "Robert Stoll <rstoll@tutteli.ch>"
@@ -19,7 +19,10 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components"
+    "bower_components",
+    "package.json",
+    "test",
+    "devconfig"    
   ],
   "main": [],
   "dependencies": {

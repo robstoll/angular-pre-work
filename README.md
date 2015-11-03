@@ -6,6 +6,13 @@ One optimisation to reduce the initial load time of an AngularJS app is based on
 
 The module tutteli.preWork tries to simplify the process of pre-working (before angular was loaded). Imagine we need to login before we can use the app and thus the server redirects the user to the login page at first. Here we want that the user can start writing straight away without waiting for angular. There is just one problem, all entered data will be lost once AngularJS sets up the two way binding.
 
+##Installation
+
+The code is quite small, so it is probably good enough to just copy the content of [src/pre-work.js](https://github.com/robstoll/angular-pre-work/blob/master/src/pre-work.js) manually. Alternatively, you can install it with bower 
+`bower install tutteli-angular-pre-work --save`
+
+##How it works
+
 This library comes with a directive `pre-work` and a service `tutteli.PreWork`which does more or less the job for you on the client-side (you still need to embed the template in the server's response accordingly, use the directive etc.).
 
 Following a simple example:
@@ -53,8 +60,6 @@ angular.module('app', ['ui.router', 'tutteli.preWork'])
 
 
 A "full" (still very small) working example can be found in the repo. Download the repo, open up the example folder and open index.html. Alternatively, you can try it out here: http://plnkr.co/edit/98AdSYCnwzIkqocDwlHq
-
-The code is quite small, so it is probably good enough to just copy the content of [src/pre-work.js](https://github.com/robstoll/angular-pre-work/blob/master/src/pre-work.js) manually. Alternatively, you can install it with bower `angular-pre-work`
 
 <br/>
 

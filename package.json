@@ -1,5 +1,5 @@
 {
-  "name": "angular-pre-work",
+  "name": "tutteli-angular-pre-work",
   "version": "0.0.1",
   "description": "Directive for AngularJS which allows to initialise models according to the value attribute of input fields",
   "keywords": [
