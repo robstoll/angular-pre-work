@@ -9,19 +9,35 @@
     var preparedData = {};
     
     function PreWork(){
-        this.merge = function(name, scope) {
-            if (preparedData[name]) {
-                for(var prop in preparedData[name]) {
-                    scope[prop] = preparedData[name][prop];
-                }
-                delete preparedData[name];
-                return true;
+        this.merge = function(name, scope, controllerAs) {
+            if(preparedData[name] == undefined || controllerAs && preparedData[name][controllerAs] == undefined) {
+                return false;
             }
-            return false;
+            
+            var data = preparedData[name];
+            if (controllerAs && data[controllerAs]) {
+                data = data[controllerAs];
+            }
+            
+            for (var prop in data) {
+                scope[prop] = data[prop];
+            }
+            
+            if (controllerAs) {
+                delete preparedData[name][controllerAs];   
+            } else {
+                delete preparedData[name];
+            }
+       
+            return true;
         };
         
-        this.get = function(name) {
-            return preparedData[name];
+        this.get = function(name, controllerAs) {
+            var data = preparedData[name]; 
+            if (data && controllerAs) {
+                return data[controllerAs];
+            }
+            return data;
         };
     }
     

@@ -59,10 +59,36 @@ describe('pre-work directive', function(){
             $rootScope.$digest();
             
             expect(PreWork.get('login.tpl').username).toBe('admin');
-            var dummy = {}
+            var dummy = {};
             PreWork.merge('login.tpl', dummy);            
             expect(dummy.username).toBe('admin');
             expect(PreWork.get('login.tpl')).toBe(undefined);
+        });
+        
+        it('Method "get" with param "controllerAs" does not remove the pregathered data', function(){
+            var element = $compile(
+                '<div pre-work="login.tpl"><input ng-model="loginCtrl.username" value="admin"/></div>'
+            )($rootScope);
+            
+            $rootScope.$digest();
+            
+            expect(PreWork.get('login.tpl', 'loginCtrl').username).toBe('admin');
+            expect(PreWork.get('login.tpl', 'loginCtrl').username).toBe('admin');
+            expect(PreWork.get('login.tpl', 'loginCtrl').username).toBe('admin');
+        });
+        
+        it('Method "merge" with param "controllerAs" removes the pregathered data after the first call', function(){
+            var element = $compile(
+                '<div pre-work="login.tpl"><input ng-model="loginCtrl.username" value="admin"/></div>'
+            )($rootScope);
+            
+            $rootScope.$digest();
+            
+            expect(PreWork.get('login.tpl', 'loginCtrl').username).toBe('admin');
+            var dummy = {};
+            PreWork.merge('login.tpl', dummy, 'loginCtrl');            
+            expect(dummy.username).toBe('admin');
+            expect(PreWork.get('login.tpl', 'loginCtrl')).toBe(undefined);
         });
     });
 });
