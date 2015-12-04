@@ -5,6 +5,9 @@
  */
 
 (function(){
+    angular.module('tutteli.preWork', [])
+        .directive('preWork', PreWorkDirective)
+        .service('tutteli.PreWork', PreWork);
     
     var preparedData = {};
     
@@ -41,31 +44,26 @@
         };
     }
     
-    angular.module('tutteli.preWork', [])
-    .directive('preWork', ['$parse', '$templateCache', function($parse, $templateCache) {
-      return {
-          scope:{},
-          compile: function (tElement, tAttrs, transclude) {
-              var name = tAttrs.preWork;
-              if ($templateCache.get(name) ==  undefined) {
-                  $templateCache.put(name, tElement.html());
-                  tElement.remove();
-              }
-              return function link(scope, elem, attrs) {
-                  var name = attrs.preWork;
-                  if (preparedData[name] ==  undefined) {
-                      preparedData[name] = {};
-                      var dummy = document.createElement('div');
-                      dummy.innerHTML = $templateCache.get(name); 
-                      angular.forEach(dummy.querySelectorAll('input[ng-model]'), function(tInput){
-                          var input = angular.element(tInput);
-                          var model = $parse(input.attr('ng-model'));
-                          model.assign(preparedData[name], input.val());
-                      });
-                  }
-              }; 
-          }
-      };
-  }]).service('tutteli.PreWork', PreWork);
-    
+    PreWorkDirective.$inject = ['$parse', '$templateCache'];
+    function PreWorkDirective($parse, $templateCache) {
+        return {
+            scope:{},
+            compile: function (tElement, tAttrs, transclude) {
+                var name = tAttrs.preWork;
+                if ($templateCache.get(name) ==  undefined) {
+                    $templateCache.put(name, tElement.html());
+                    preparedData[name] = {};
+                    angular.forEach(tElement[0].querySelectorAll('input[ng-model]'), function(tInput){
+                        var input = angular.element(tInput);
+                        var model = $parse(input.attr('ng-model'));
+                        model.assign(preparedData[name], input.val());
+                    });
+                    tElement.remove();
+                }
+                return function link(scope, elem, attrs) {
+                    //nothing to do anymore
+                }; 
+            }
+        };
+    }    
 })();

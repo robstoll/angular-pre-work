@@ -25,6 +25,20 @@ describe('pre-work directive', function(){
         expect(PreWork.get('login.tpl').username).toBe('admin');
     });
     
+    it('Saves pre-work entered by the user', function(){
+        var div = document.createElement('div');
+        div.setAttribute('pre-work', 'login.tpl');
+        var inpt = document.createElement('input');
+        inpt.setAttribute('ng-model', 'username');
+        inpt.value = 'admin';
+        div.appendChild(inpt);
+        var element = $compile(div)($rootScope);
+        
+        $rootScope.$digest();
+        
+        expect(PreWork.get('login.tpl').username).toBe('admin');
+    });
+    
     it('Separates different directives according to the value of the directive', function(){
         var element = $compile(
             '<div pre-work="login.tpl"><input ng-model="username" value="admin"/></div>' +
