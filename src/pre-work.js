@@ -53,7 +53,9 @@ function PreWorkDirective($parse, $templateCache) {
         compile: function (tElement, tAttrs, transclude) {
             var name = tAttrs.preWork;
             if ($templateCache.get(name) ==  undefined) {
-                $templateCache.put(name, tElement.html());
+                var html = tElement.html();
+                html = html.replace(/<!-- pre-work-exclude-start -->[^]*?<!-- pre-work-exclude-end -->/g, ''); 
+                $templateCache.put(name, html);
                 preparedData[name] = {};
                 angular.forEach(tElement[0].querySelectorAll('[ng-model]'), function(tInput){
                     var input = angular.element(tInput);
