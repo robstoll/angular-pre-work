@@ -55,7 +55,7 @@ function PreWorkDirective($parse, $templateCache) {
             if ($templateCache.get(name) ==  undefined) {
                 $templateCache.put(name, tElement.html());
                 preparedData[name] = {};
-                angular.forEach(tElement[0].querySelectorAll('input[ng-model]'), function(tInput){
+                angular.forEach(tElement[0].querySelectorAll('[ng-model]'), function(tInput){
                     var input = angular.element(tInput);
                     var model = $parse(input.attr('ng-model'));
                     model.assign(preparedData[name], input.val());
