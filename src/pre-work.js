@@ -56,12 +56,17 @@ function PreWorkDirective($parse, $templateCache) {
                 var html = tElement.html();
                 html = html.replace(/<!-- pre-work-exclude-start -->[^]*?<!-- pre-work-exclude-end -->/g, ''); 
                 $templateCache.put(name, html);
-                preparedData[name] = {};
-                angular.forEach(tElement[0].querySelectorAll('[ng-model]'), function(tInput){
-                    var input = angular.element(tInput);
-                    var model = $parse(input.attr('ng-model'));
-                    model.assign(preparedData[name], input.val());
+                var data = {};
+                angular.forEach(tElement[0].querySelectorAll('[ng-model]'), function(tElement){
+                    var element = angular.element(tElement);
+                    var model = $parse(element.attr('ng-model'));
+                    model.assign(data, element.val());
+                    if (tElement.tagName == "SELECT") {
+                        var model = $parse(element.attr('ng-model') + '_label');
+                        model.assign(data, tElement.options[tElement.selectedIndex].text);    
+                    }
                 });
+                preparedData[name] = data;
                 tElement.remove();
             }
             return function link(scope, elem, attrs) {

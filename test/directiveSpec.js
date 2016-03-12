@@ -22,7 +22,7 @@ describe('pre-work directive', function(){
     }]));
     
     it('saves pre-work send by the server aka consideres the value attribute', function() {
-        var element = $compile(
+        $compile(
             '<div pre-work="login.tpl"><input ng-model="username" value="admin"/></div>'
         )($rootScope);
                
@@ -36,13 +36,55 @@ describe('pre-work directive', function(){
         inpt.setAttribute('ng-model', 'username');
         inpt.value = 'admin';
         div.appendChild(inpt);
-        var element = $compile(div)($rootScope);
+        $compile(div)($rootScope);
         
         expect(PreWork.get('login.tpl').username).toBe('admin');
     });
     
+    it('saves the label for select-elements', function() {
+        $compile(
+            '<div pre-work="login.tpl"><select ng-model="user"><option value="1">admin</option></select></div>'
+        )($rootScope);
+               
+        expect(PreWork.get('login.tpl').user).toBe('1');
+        expect(PreWork.get('login.tpl').user_label).toBe('admin');
+    });
+    
+    it('saves the correct value and label for select-elements defined by the server', function() {
+        $compile(
+            '<div pre-work="login.tpl"><select ng-model="user">'
+                + '<option value="1">admin</option>'
+                + '<option value="2" selected="selected">user</option>'
+            + '</select></div>'
+        )($rootScope);
+               
+        expect(PreWork.get('login.tpl').user).toBe('2');
+        expect(PreWork.get('login.tpl').user_label).toBe('user');
+    });
+    
+    it('saves the correct value and label for select-elements selected by the user', function() {
+        var div = document.createElement('div');
+        div.setAttribute('pre-work', 'login.tpl');
+        var select = document.createElement('select');
+        select.setAttribute('ng-model', 'user');
+        var option1 = document.createElement('option');
+        option1.value = '1';
+        option1.text = 'admin';
+        select.add(option1);
+        var option2 = document.createElement('option');
+        option2.value = '2';
+        option2.text = 'user';
+        select.add(option2);
+        select.selectedIndex = 0;
+        div.appendChild(select);
+        $compile(div)($rootScope);
+        
+        expect(PreWork.get('login.tpl').user).toBe('1');
+        expect(PreWork.get('login.tpl').user_label).toBe('admin');
+    });
+    
     it('separates different directives according to the value of the directive', function() {
-        var element = $compile(
+        $compile(
             '<div pre-work="login.tpl"><input ng-model="username" value="admin"/></div>' +
             '<div pre-work="profile.tpl"><input ng-model="username" value="robstoll"/></div>'
         )($rootScope);
@@ -54,7 +96,7 @@ describe('pre-work directive', function(){
     it('saves template in $templateCache', function() {
         var loginTpl = 'my login template';
         
-        var element = $compile('<div pre-work="login.tpl">' + loginTpl + '</div>')($rootScope);
+         $compile('<div pre-work="login.tpl">' + loginTpl + '</div>')($rootScope);
         
         expect($templateCache.get('login.tpl')).toBe(loginTpl);
     });
@@ -62,7 +104,7 @@ describe('pre-work directive', function(){
     it('saves template in $templateCache for multiple directives', function() {
         var loginTpl = 'my login template';
         var profileTpl = 'another template';
-        var element = $compile(
+        $compile(
                 '<div pre-work="login.tpl">' + loginTpl + '</div>' +
                 '<div pre-work="profile.tpl">' + profileTpl + '</div>'
         )($rootScope);
@@ -72,15 +114,15 @@ describe('pre-work directive', function(){
     });
     
     it('excludes marked area from template', function() {
-        var element = $compile('<div pre-work="login.tpl">'
+        $compile('<div pre-work="login.tpl">'
                 + 'asdf<!-- pre-work-exclude-start --> not in template <!-- pre-work-exclude-end -->'
                 + '</div>')($rootScope);
                 
         expect($templateCache.get('login.tpl')).toBe('asdf');
     });
     
-    it('excludes marked areas from template', function() {
-        var element = $compile('<div pre-work="login.tpl">'
+    it('excludes multiple marked areas from template', function() {
+        $compile('<div pre-work="login.tpl">'
                 + 'hello<!-- pre-work-exclude-start --> not in template <!-- pre-work-exclude-end --> '
                 + 'world<!-- pre-work-exclude-start --> not in template 2 <!-- pre-work-exclude-end -->'
                 + '</div>')($rootScope);
@@ -91,7 +133,7 @@ describe('pre-work directive', function(){
     describe('PreWork service', function() {
         
         it('get: does not remove the pregathered data', function() {
-            var element = $compile(
+            $compile(
                 '<div pre-work="login.tpl"><input ng-model="username" value="admin"/></div>'
             )($rootScope);
             
@@ -101,7 +143,7 @@ describe('pre-work directive', function(){
         });
         
         it('merge: removes the pregathered data after the first call', function() {
-            var element = $compile(
+            $compile(
                 '<div pre-work="login.tpl"><input ng-model="username" value="admin"/></div>'
             )($rootScope);
             
@@ -113,7 +155,7 @@ describe('pre-work directive', function(){
         });
         
         it('get: with param "controllerAs" does not remove the pregathered data', function() {
-            var element = $compile(
+            $compile(
                 '<div pre-work="login.tpl"><input ng-model="loginCtrl.username" value="admin"/></div>'
             )($rootScope);
             
@@ -123,7 +165,7 @@ describe('pre-work directive', function(){
         });
         
         it('merge: with param "controllerAs" removes the pregathered data after the first call', function() {
-            var element = $compile(
+            $compile(
                 '<div pre-work="login.tpl"><input ng-model="loginCtrl.username" value="admin"/></div>'
             )($rootScope);
             
