@@ -48,25 +48,39 @@ function PreWork(){
 
 PreWorkDirective.$inject = ['$parse', '$templateCache'];
 function PreWorkDirective($parse, $templateCache) {
+    
+    function calculatePreWorkData(tPreWrok) {
+        var data = {};
+        angular.forEach(tPreWrok[0].querySelectorAll('[ng-model]'), function(tElement){
+            var element = angular.element(tElement);
+            var model = $parse(element.attr('ng-model'));
+            if (tElement.tagName != "SELECT") {
+                model.assign(data, element.val());
+            } else {
+                var selectedElement = tElement.options[tElement.selectedIndex];
+                if (selectedElement) {
+                    model.assign(data, element.val());
+                    var label = $parse(element.attr('ng-model') + '_label');
+                    label.assign(data, selectedElement.text);
+                }
+            }
+        });
+        return data;
+    }
+    
+    function saveTemplate(name, tElement) {
+        var html = tElement.html();
+        html = html.replace(/<!-- pre-work-exclude-start -->[^]*?<!-- pre-work-exclude-end -->/g, ''); 
+        $templateCache.put(name, html);
+    }
+    
     return {
         scope:{},
         compile: function (tElement, tAttrs, transclude) {
             var name = tAttrs.preWork;
             if ($templateCache.get(name) ==  undefined) {
-                var html = tElement.html();
-                html = html.replace(/<!-- pre-work-exclude-start -->[^]*?<!-- pre-work-exclude-end -->/g, ''); 
-                $templateCache.put(name, html);
-                var data = {};
-                angular.forEach(tElement[0].querySelectorAll('[ng-model]'), function(tElement){
-                    var element = angular.element(tElement);
-                    var model = $parse(element.attr('ng-model'));
-                    model.assign(data, element.val());
-                    if (tElement.tagName == "SELECT") {
-                        var model = $parse(element.attr('ng-model') + '_label');
-                        model.assign(data, tElement.options[tElement.selectedIndex].text);    
-                    }
-                });
-                preparedData[name] = data;
+                saveTemplate(name, tElement);
+                preparedData[name] = calculatePreWorkData(tElement);
                 tElement.remove();
             }
             return function link(scope, elem, attrs) {

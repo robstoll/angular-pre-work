@@ -5,10 +5,10 @@
  */
 
 describe('pre-work directive', function(){
-   var $compile = null, 
-       $rootScope = null,
-       $templateCache = null,
-       PreWork = null;
+    var $compile = null, 
+        $rootScope = null,
+        $templateCache = null,
+        PreWork = null;
 
     beforeEach(module('tutteli.preWork'));
     
@@ -29,9 +29,14 @@ describe('pre-work directive', function(){
         expect(PreWork.get('login.tpl').username).toBe('admin');
     });
     
-    it('saves pre-work entered by the user', function() {
+    function createPreWork(template) {
         var div = document.createElement('div');
-        div.setAttribute('pre-work', 'login.tpl');
+        div.setAttribute('pre-work', template);
+        return div;
+    }
+    
+    it('saves pre-work entered by the user', function() {
+        var div = createPreWork('login.tpl');
         var inpt = document.createElement('input');
         inpt.setAttribute('ng-model', 'username');
         inpt.value = 'admin';
@@ -62,9 +67,7 @@ describe('pre-work directive', function(){
         expect(PreWork.get('login.tpl').user_label).toBe('user');
     });
     
-    it('saves the correct value and label for select-elements selected by the user', function() {
-        var div = document.createElement('div');
-        div.setAttribute('pre-work', 'login.tpl');
+    function createSelectWithTwoUsers(preWork) {
         var select = document.createElement('select');
         select.setAttribute('ng-model', 'user');
         var option1 = document.createElement('option');
@@ -75,12 +78,52 @@ describe('pre-work directive', function(){
         option2.value = '2';
         option2.text = 'user';
         select.add(option2);
+        preWork.appendChild(select);
+        return select;
+    }
+    
+    it('saves the correct value and label for select-elements selected by the user', function() {
+        var div = createPreWork('login.tpl');
+        var select = createSelectWithTwoUsers(div);
         select.selectedIndex = 0;
-        div.appendChild(select);
+        
         $compile(div)($rootScope);
         
         expect(PreWork.get('login.tpl').user).toBe('1');
         expect(PreWork.get('login.tpl').user_label).toBe('admin');
+    });
+    
+    it('no error if select has selectedIndex = -1', function() {
+        var div = createPreWork('login.tpl');
+        var select = createSelectWithTwoUsers(div);
+        select.selectedIndex = -1;
+        div.appendChild(select);
+        $compile(div)($rootScope);
+        
+        expect(PreWork.get('login.tpl').user).toBe(undefined);
+        expect(PreWork.get('login.tpl').user_label).toBe(undefined);
+    });
+    
+    it('no error if select has selectedIndex = -2', function() {
+        var div = createPreWork('login.tpl');
+        var select = createSelectWithTwoUsers(div);
+        select.selectedIndex = -2;
+        div.appendChild(select);
+        $compile(div)($rootScope);
+        
+        expect(PreWork.get('login.tpl').user).toBe(undefined);
+        expect(PreWork.get('login.tpl').user_label).toBe(undefined);
+    });
+    
+    it('no error if select has selectedIndex which is out of range', function() {
+        var div = createPreWork('login.tpl');
+        var select = createSelectWithTwoUsers(div);
+        select.selectedIndex = 100;
+        div.appendChild(select);
+        $compile(div)($rootScope);
+        
+        expect(PreWork.get('login.tpl').user).toBe(undefined);
+        expect(PreWork.get('login.tpl').user_label).toBe(undefined);
     });
     
     it('separates different directives according to the value of the directive', function() {
