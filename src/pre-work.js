@@ -55,7 +55,12 @@ function PreWorkDirective($parse, $templateCache) {
             var element = angular.element(tElement);
             var model = $parse(element.attr('ng-model'));
             if (tElement.tagName != "SELECT") {
-                model.assign(data, element.val());
+                var inputType = element.attr('type');
+                if(inputType == null || inputType.toLowerCase() != 'checkbox') {
+                    model.assign(data, element.val());    
+                } else {
+                    model.assign(data, tElement.checked);
+                }
             } else {
                 var selectedElement = tElement.options[tElement.selectedIndex];
                 if (selectedElement) {

@@ -126,6 +126,53 @@ describe('pre-work directive', function(){
         expect(PreWork.get('login.tpl').user_label).toBe(undefined);
     });
     
+    it('saves the checked-state (which is true) of a checkbox defined by the server (and not its value)', function() {
+        $compile(
+            '<div pre-work="login.tpl"><select ng-model="user">'
+                + '<input type="checkbox" ng-model="isHappy" value="1" checked="checked"> SomeLabel'
+            + '</div>'
+        )($rootScope);
+               
+        expect(PreWork.get('login.tpl').isHappy).toBe(true);
+    });
+    
+    it('saves the checked-state (which is false) of a checkbox defined by the server (and not its value)', function() {
+        $compile(
+            '<div pre-work="login.tpl"><select ng-model="user">'
+                + '<input type="checkbox" ng-model="isHappy" value="1"> SomeLabel'
+            + '</div>'
+        )($rootScope);
+               
+        expect(PreWork.get('login.tpl').isHappy).toBe(false);
+    });
+    
+    function createCheckboxAndIsChecked(value, isChecked) {
+        var checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = value;
+        checkbox.setAttribute('ng-model', 'isHappy');
+        checkbox.checked = isChecked;
+        return checkbox;
+    }
+    
+    it('saves the checked-state (which is true) of a checkbox defined by user (and not its value)', function() {
+        var div = createPreWork('login.tpl');
+        var checkbox = createCheckboxAndIsChecked('false', true);
+        div.appendChild(checkbox);
+        $compile(div)($rootScope);
+        
+        expect(PreWork.get('login.tpl').isHappy).toBe(true);
+    });
+    
+    it('saves the checked-state (which is false) of a checkbox defined by user (and not its value)', function() {
+        var div = createPreWork('login.tpl');
+        var checkbox = createCheckboxAndIsChecked('true', false);
+        div.appendChild(checkbox);
+        $compile(div)($rootScope);
+        
+        expect(PreWork.get('login.tpl').isHappy).toBe(false);
+    });
+    
     it('separates different directives according to the value of the directive', function() {
         $compile(
             '<div pre-work="login.tpl"><input ng-model="username" value="admin"/></div>' +
